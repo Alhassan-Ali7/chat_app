@@ -66,4 +66,11 @@ class AuthCubit extends Cubit<AuthState> {
       showSnackBar(context, e.toString());
     }
   }
+
+  @override
+  void onChange(Change<AuthState> change) {
+    // TODO: implement onChange
+    super.onChange(change);
+    print(change);
+  }
 }
