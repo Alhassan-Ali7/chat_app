@@ -7,7 +7,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
 
-import 'cubits/register_cubit/register_cubit.dart';
+import 'cubits/auth_cubit/auth_cubit.dart';
+
 
 class RegisterPage extends StatelessWidget {
   static String id = 'RegisterPage';
@@ -18,21 +19,21 @@ class RegisterPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocConsumer<RegisterCubit, RegisterState>(
+    return BlocConsumer<AuthCubit, AuthState>(
       listener: (context, state) {
         if (state is RegisterLoading) {
-          BlocProvider.of<RegisterCubit>(context).isLoading = true;
+          BlocProvider.of<AuthCubit>(context).isLoading = true;
         } else if (state is RegisterSuccess) {
           BlocProvider.of<ChatCubit>(context).getMessages();
-          Navigator.pushNamed(context, ChatPage.id,arguments: BlocProvider.of<RegisterCubit>(context).email);
-          BlocProvider.of<RegisterCubit>(context).isLoading = false;
+          Navigator.pushNamed(context, ChatPage.id,arguments: BlocProvider.of<AuthCubit>(context).email);
+          BlocProvider.of<AuthCubit>(context).isLoading = false;
         } else if (state is RegisterFailure) {
-          BlocProvider.of<RegisterCubit>(context).isLoading = false;
+          BlocProvider.of<AuthCubit>(context).isLoading = false;
         }
       },
       builder: (context, state) {
         return ModalProgressHUD(
-          inAsyncCall: BlocProvider.of<RegisterCubit>(context).isLoading,
+          inAsyncCall: BlocProvider.of<AuthCubit>(context).isLoading,
           child: Scaffold(
             backgroundColor: kPrimaryColor,
             body: Padding(
@@ -80,7 +81,7 @@ class RegisterPage extends StatelessWidget {
                     ),
                     CustomFormTextField(
                       onChanged: (data) {
-                        BlocProvider.of<RegisterCubit>(context).email = data;
+                        BlocProvider.of<AuthCubit>(context).email = data;
                       },
                       hintText: 'Email',
                     ),
@@ -89,7 +90,7 @@ class RegisterPage extends StatelessWidget {
                     ),
                     CustomFormTextField(
                       onChanged: (data) {
-                        BlocProvider.of<RegisterCubit>(context).password = data;
+                        BlocProvider.of<AuthCubit>(context).password = data;
                       },
                       hintText: 'Password',
                     ),
@@ -100,9 +101,9 @@ class RegisterPage extends StatelessWidget {
                       text: 'REGISTER',
                       onTap: () async {
                         if (formKey.currentState!.validate()) {
-                          BlocProvider.of<RegisterCubit>(context).registerUser(
-                            email: BlocProvider.of<RegisterCubit>(context).email!,
-                            password: BlocProvider.of<RegisterCubit>(context).password!,
+                          BlocProvider.of<AuthCubit>(context).registerUser(
+                            email: BlocProvider.of<AuthCubit>(context).email!,
+                            password: BlocProvider.of<AuthCubit>(context).password!,
                             context: context,
                           );
                         }

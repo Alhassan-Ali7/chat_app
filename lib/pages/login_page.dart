@@ -1,6 +1,6 @@
 import 'package:chat_app/constants/constants.dart';
 import 'package:chat_app/pages/chat_page.dart';
-import 'package:chat_app/pages/cubits/login_cubit/login_cubit.dart';
+import 'package:chat_app/pages/cubits/auth_cubit/auth_cubit.dart';
 import 'package:chat_app/pages/register_page.dart';
 import 'package:chat_app/widgets/custom_button.dart';
 import 'package:chat_app/widgets/custom_text_field.dart';
@@ -19,20 +19,20 @@ class LoginPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocConsumer<LoginCubit, LoginState>(
+    return BlocConsumer<AuthCubit, AuthState>(
       listener: (context, state) {
         if (state is LoginLoading) {
-          BlocProvider.of<LoginCubit>(context).isLoading = true;
+          BlocProvider.of<AuthCubit>(context).isLoading = true;
         } else if (state is LoginSuccess) {
           BlocProvider.of<ChatCubit>(context).getMessages();
-          Navigator.pushNamed(context, ChatPage.id, arguments: BlocProvider.of<LoginCubit>(context).email);
-          BlocProvider.of<LoginCubit>(context).isLoading = false;
+          Navigator.pushNamed(context, ChatPage.id, arguments: BlocProvider.of<AuthCubit>(context).email);
+          BlocProvider.of<AuthCubit>(context).isLoading = false;
         }else if(state is LoginFailure){
-          BlocProvider.of<LoginCubit>(context).isLoading = false;
+          BlocProvider.of<AuthCubit>(context).isLoading = false;
         }
       },
       builder:(context, state) =>  ModalProgressHUD(
-        inAsyncCall: BlocProvider.of<LoginCubit>(context).isLoading,
+        inAsyncCall: BlocProvider.of<AuthCubit>(context).isLoading,
         child: Scaffold(
           backgroundColor: kPrimaryColor,
           body: Padding(
@@ -80,7 +80,7 @@ class LoginPage extends StatelessWidget {
                   ),
                   CustomFormTextField(
                     onChanged: (data) {
-                      BlocProvider.of<LoginCubit>(context).email = data;
+                      BlocProvider.of<AuthCubit>(context).email = data;
                     },
                     hintText: 'Email',
                   ),
@@ -89,7 +89,7 @@ class LoginPage extends StatelessWidget {
                   ),
                   CustomFormTextField(
                     onChanged: (data) {
-                      BlocProvider.of<LoginCubit>(context).password = data;
+                      BlocProvider.of<AuthCubit>(context).password = data;
                     },
                     hintText: 'Password',
                   ),
@@ -99,9 +99,9 @@ class LoginPage extends StatelessWidget {
                   CustomButton(
                     onTap: () async {
                       if (formKey.currentState!.validate()) {
-                        BlocProvider.of<LoginCubit>(context).loginUser(
-                          email: BlocProvider.of<LoginCubit>(context).email!,
-                          password: BlocProvider.of<LoginCubit>(context).password!,
+                        BlocProvider.of<AuthCubit>(context).loginUser(
+                          email: BlocProvider.of<AuthCubit>(context).email!,
+                          password: BlocProvider.of<AuthCubit>(context).password!,
                           context: context,
                         );
                       }
